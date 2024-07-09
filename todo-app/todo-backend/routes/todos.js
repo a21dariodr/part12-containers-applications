@@ -16,11 +16,11 @@ router.post('/', async (req, res) => {
     done: false
   })
 
-  const todosCount = await getAsync('todos');
+  const todosCount = await redis.getAsync('todos');
   if (todosCount) {
-    setAsync('todos', Number(todosCount) + 1)
+    redis.setAsync('todos', Number(todosCount) + 1)
   } else {
-    setAsync('todos', 1)
+    redis.setAsync('todos', 1)
   }
 
   res.send(todo);
