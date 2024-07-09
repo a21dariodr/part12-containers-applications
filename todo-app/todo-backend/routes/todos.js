@@ -2,13 +2,13 @@ const express = require('express');
 const { Todo } = require('../mongo')
 const router = express.Router();
 
-/* GET todos listing. */
+/* GET to-dos listing. */
 router.get('/', async (_, res) => {
   const todos = await Todo.find({})
   res.send(todos);
 });
 
-/* POST todo to listing. */
+/* POST to-do to listing. */
 router.post('/', async (req, res) => {
   const todo = await Todo.create({
     text: req.body.text,
@@ -27,20 +27,31 @@ const findByIdMiddleware = async (req, res, next) => {
   next()
 }
 
-/* DELETE todo. */
+/* DELETE to-do. */
 singleRouter.delete('/', async (req, res) => {
   await req.todo.delete()  
   res.sendStatus(200);
 });
 
-/* GET todo. */
+/* GET to-do. */
 singleRouter.get('/', async (req, res) => {
-  res.sendStatus(405); // Implement this
+  res.send(req.todo);
 });
 
-/* PUT todo. */
+/* PUT to-do. */
 singleRouter.put('/', async (req, res) => {
-  res.sendStatus(405); // Implement this
+  const todo = await Todo.findByIdAndUpdate(
+    req.todo._id,
+    {
+      text: req.body.text,
+      done: req.body.done,
+    },
+    {
+      new: true,
+      omitUndefined: true
+    }
+  )
+  res.send(todo);
 });
 
 router.use('/:id', findByIdMiddleware, singleRouter)
