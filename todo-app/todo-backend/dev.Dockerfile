@@ -1,6 +1,6 @@
 FROM node:20
 WORKDIR /usr/todoapp/backend
-COPY --chown=node:node . .
+COPY . .
 RUN npm ci
 USER node
 CMD npm start
