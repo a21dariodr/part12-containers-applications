@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 const Todo = ({ todo, onClickComplete, onClickDelete }) => {
     const doneInfo = (
         <>

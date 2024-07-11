@@ -1,0 +1,28 @@
+services:
+  nginx:
+    image: nginx:1.20.1
+    volumes:
+      - ./nginx.dev.conf:/etc/nginx/nginx.conf:ro
+    ports:
+      - 8080:80
+    container_name: reverse-proxy
+    depends_on:
+      - patientor-frontend
+      - patientor-backend
+
+  patientor-frontend:
+    build:
+      context: ./frontend/
+      dockerfile: dev.Dockerfile
+    volumes:
+      - ./frontend/:/usr/patientor/frontend
+      - /usr/patientor/frontend/node_modules
+    container_name: patientor-frontend-dev
+
+  patientor-backend:
+    build:
+      context: ./backend/
+      dockerfile: dev.Dockerfile
+    volumes:
+      - ./backend/:/usr/patientor/backend
+    container_name: patientor-backend-dev
